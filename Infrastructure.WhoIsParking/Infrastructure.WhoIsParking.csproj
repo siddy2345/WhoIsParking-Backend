@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Domain.WhoIsParking\Domain.WhoIsParking.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

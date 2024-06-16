@@ -14,4 +14,9 @@
     <ProjectReference Include="..\Domain.WhoIsParking\Domain.WhoIsParking.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="UseCases\" />
+  </ItemGroup>
+
 </Project>
