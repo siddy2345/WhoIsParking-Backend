@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.WhoIsParking\App.WhoIsParking.csproj" />
-    <ProjectReference Include="..\Domain.WhoIsParking\Domain.WhoIsParking.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <ProjectReference Include="..\App.WhoIsParking\App.WhoIsParking.csproj" />
+    <ProjectReference Include="..\Domain.WhoIsParking\Domain.WhoIsParking.csproj" />
   </ItemGroup>
 
 </Project>
