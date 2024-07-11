@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Repositories\" />
-    <Folder Include="UseCases\" />
+    <Folder Include="Mapping\" />
+    <Folder Include="UseCases\ParkedCars\Queries\" />
   </ItemGroup>
 
 </Project>
