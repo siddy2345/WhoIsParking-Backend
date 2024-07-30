@@ -1,4 +1,5 @@
 using App.WhoIsParking;
+using Infrastructure.WhoIsParking;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 
 // Inject Layers
 builder.Services.AddInjectionApplication();
+builder.Services.AddInjectionInfrastructure();
 
 builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     policy =>
