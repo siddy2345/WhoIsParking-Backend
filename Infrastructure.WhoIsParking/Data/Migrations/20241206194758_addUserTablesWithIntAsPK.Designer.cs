@@ -4,6 +4,7 @@ using Infrastructure.WhoIsParking.Data.EntitiesConfig;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.WhoIsParking.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241206194758_addUserTablesWithIntAsPK")]
+    partial class addUserTablesWithIntAsPK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,8 +132,8 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParkedCarId"));
 
-                    b.Property<DateTimeOffset>("Arrival")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("Arrival")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CarBrand")
                         .IsRequired()

@@ -23,7 +23,7 @@ public class ParkedCar
     public string Lastname { get; set; } = string.Empty;
 
     [Required]
-    public DateTime Arrival { get; set; }
+    public DateTimeOffset Arrival { get; set; }
 
     [Required]
     public int HouseId { get; set; }

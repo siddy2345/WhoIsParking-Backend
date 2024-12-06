@@ -1,4 +1,5 @@
 using App.WhoIsParking;
+using Domain.WhoIsParking.Models;
 using Infrastructure.WhoIsParking;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
 using Microsoft.AspNetCore.Identity;
@@ -33,7 +34,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<DataContext>();
 
 // Inject Layers
@@ -56,7 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<ApplicationUser>();
 
 app.UseHttpsRedirection();
 
