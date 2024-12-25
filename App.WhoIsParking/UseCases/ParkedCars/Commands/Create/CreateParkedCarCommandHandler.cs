@@ -15,7 +15,6 @@ internal class CreateParkedCarCommandHandler : IRequestHandler<CreateParkedCarCo
     public async Task<int> Handle(CreateParkedCarCommand request, CancellationToken token)
     {
         var res = await _parkedCarRepository.AddAsync(request.ParkedCar, token).ConfigureAwait(false);
-
         return res.ParkedCarId;
     }
 }

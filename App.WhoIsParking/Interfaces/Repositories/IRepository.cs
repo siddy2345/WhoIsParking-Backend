@@ -1,15 +1,17 @@
-﻿using System.Security.Cryptography;
+﻿using System.Data.SqlTypes;
+using System.Numerics;
+using System.Security.Cryptography;
 
 namespace App.WhoIsParking.Interfaces.Repositories;
 
-public interface IRepository<T, TID>
+public interface IRepository<TEntity, TId> where TEntity: class where TId : IEquatable<TId>
 {
     // Query
-    Task<T?> GetAsync(TID id, CancellationToken token);
-    Task<T?> GetAggregateAsync(TID id, CancellationToken token);
+    Task<TEntity?> GetAsync(TId id, CancellationToken token);
+    Task<TEntity?> GetAggregateAsync(TId id, CancellationToken token);
 
     // Command
-    Task<T> AddAsync(T entity, CancellationToken token);
-    Task<T> UpdateAsync(T entity, CancellationToken token);
-    Task DeleteAsync(T entity, CancellationToken token);
+    Task<TEntity> AddAsync(TEntity entity, CancellationToken token);
+    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken token);
+    Task DeleteAsync(TEntity entity, CancellationToken token);
 }

@@ -6,6 +6,7 @@ internal class CreateParkedCarCommandPreProcessor : IRequestPreProcessor<CreateP
 {
     public Task Process(CreateParkedCarCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
+        //throw new NotImplementedException();
     }
 }

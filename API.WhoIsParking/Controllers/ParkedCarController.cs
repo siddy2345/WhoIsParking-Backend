@@ -1,9 +1,10 @@
-﻿using API.WhoIsParking.Models;
+﻿using API.WhoIsParking.Mapping;
+using API.WhoIsParking.Models;
 using App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
 using Domain.WhoIsParking.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace API.WhoIsParking.Controllers;
 
@@ -18,32 +19,32 @@ public class ParkedCarController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Creates a parked car object
+    /// </summary>
+    /// <param name="parkedCarModel">The parked car to create</param>
+    /// <param name="token">Token to cancel operation</param>
+    /// <returns>Id of newly created object</returns>
+    /// <exception cref="Exception">Bad request if the model did not meet the expectation</exception>
     [HttpPost]
+    [SwaggerResponseHeader(StatusCodes.Status201Created, "Parked car successfully registerd", "Created","")]
+    [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "Parked car could not be registered", "BadRequest","")]
     public async Task<IActionResult> PostAsync(ParkedCarModel parkedCarModel, CancellationToken token)
     {
         try
         {
-            ParkedCar parkedCar = new ParkedCar()
-            {
-                Arrival = parkedCarModel.Arrival,
-                CarBrand = parkedCarModel.CarBrand,
-                CarModel = parkedCarModel.CarModel,
-                Firstname = parkedCarModel.Firstname,
-                Lastname = parkedCarModel.Lastname,
-                NumberPlate = parkedCarModel.NumberPlate,
-                HouseId = parkedCarModel.HouseId
-            };
-
+            ParkedCar parkedCar = ParkedCarMapping.MapToDomainModel(parkedCarModel);
             var command = new CreateParkedCarCommand(parkedCar);
-            var res = await _mediator.Send<int>(command, token);
+            var response = await _mediator.Send<int>(command, token);
 
+            var location = Url.Action(null, null, new { id = response }, Request.Scheme);
+            return Created(location, new { id = response });
         }
         catch (Exception e)
         {
 
-            throw new Exception(e.Message);
+            return BadRequest(new { Error = e.Message });
         }
-        
-        return Created();
+
     }
 }
