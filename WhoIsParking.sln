@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.WhoIsParking
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.WhoIsParking", "Domain.WhoIsParking\Domain.WhoIsParking.csproj", "{5C8C6CDF-EE15-43A1-BFBC-A3B8A8E2961E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1542115D-1D9E-4339-8C36-212083B93A5C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +39,19 @@ Global
 		{5C8C6CDF-EE15-43A1-BFBC-A3B8A8E2961E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C8C6CDF-EE15-43A1-BFBC-A3B8A8E2961E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C8C6CDF-EE15-43A1-BFBC-A3B8A8E2961E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1450964C-5DD2-4761-91F0-8B7503E20203} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{79349561-D972-43DC-A69A-55D52AD4DC4D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B21D21D0-5BCA-4D2E-A2E0-F690E3A9103C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{5C8C6CDF-EE15-43A1-BFBC-A3B8A8E2961E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {60385525-511E-47DD-97C6-BB08933CE4F7}

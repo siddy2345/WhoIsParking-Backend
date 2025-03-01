@@ -1,0 +1,32 @@
+services:
+  api.whoisparking:
+    image: ${DOCKER_REGISTRY-}apiwhoisparking
+    build:
+      context: .
+      dockerfile: API.WhoIsParking/Dockerfile
+    ports:
+        - "5000:5000"
+        - "5001:5001"
+
+  whoisparking.database:
+    image: postgres:latest  
+    container_name: whoisparking.database
+    environment:
+        - POSTGRES_DB=whoisparking
+        - POSTGRES_USER=sahid
+        - POSTGRES_PASSWORD=sahid
+    volumes:
+        - ./.containers/whoisparking-db:/var/lib/postgresql/data
+    ports:
+        - 5432:5432
+
+  whoisparking.pgadmin:
+    image: dpage/pgadmin4
+    container_name: whoisparking.pgadmin
+    ports:
+        - "8081:80"
+    environment:
+        PGADMIN_DEFAULT_EMAIL: s.fakiry23@gmail.com
+        PGADMIN_DEFAULT_PASSWORD: sahid
+    volumes:
+        - ./.containers/whoisparking-pgadmin:/var/lib/pgadmin
