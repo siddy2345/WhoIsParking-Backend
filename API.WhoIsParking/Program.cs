@@ -1,8 +1,8 @@
+using API.WhoIsParking.Extensions;
 using App.WhoIsParking;
 using Domain.WhoIsParking.Models;
 using Infrastructure.WhoIsParking;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultPostgresConnection"));
 }
 );
 
@@ -55,6 +55,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.MapIdentityApi<ApplicationUser>();
