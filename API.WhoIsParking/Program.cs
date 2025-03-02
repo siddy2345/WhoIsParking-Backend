@@ -29,8 +29,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultPostgresConnection"));
-}
-);
+});
 
 builder.Services.AddAuthorization();
 

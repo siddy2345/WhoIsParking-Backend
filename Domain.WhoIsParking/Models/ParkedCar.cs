@@ -14,9 +14,6 @@ public class ParkedCar
     public string CarBrand { get; set; } = string.Empty;
 
     [MaxLength(100), Required]
-    public string CarModel { get; set; } = string.Empty;
-
-    [MaxLength(100), Required]
     public string Firstname { get; set; } = string.Empty;
 
     [MaxLength(100), Required]
