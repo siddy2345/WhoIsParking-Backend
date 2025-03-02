@@ -20,7 +20,10 @@ public class ParkedCar
     public string Lastname { get; set; } = string.Empty;
 
     [Required]
-    public DateTimeOffset Arrival { get; set; }
+    public DateTime Arrival { get; set; }
+
+    [Required]
+    public string TimeZoneInfo { get; set; } = string.Empty;
 
     [Required]
     public int HouseId { get; set; }

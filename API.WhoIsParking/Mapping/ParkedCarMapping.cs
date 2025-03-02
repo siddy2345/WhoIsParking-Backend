@@ -11,6 +11,7 @@ namespace API.WhoIsParking.Mapping
             {
                 ParkedCarId = parkedCar.ParkedCarId,
                 Arrival = parkedCar.Arrival,
+                TimeZoneInfo = parkedCar.TimeZoneInfo,
                 CarBrand = parkedCar.CarBrand,
                 NumberPlate = parkedCar.NumberPlate,
                 Firstname = parkedCar.Firstname,

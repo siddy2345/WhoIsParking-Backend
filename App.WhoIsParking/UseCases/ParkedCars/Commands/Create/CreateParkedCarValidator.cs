@@ -13,8 +13,9 @@ internal class CreateParkedCarValidator : AbstractValidator<ParkedCar>
         RuleFor(parkedCar => parkedCar.Firstname).NotEmpty();
         RuleFor(parkedCar => parkedCar.Lastname).NotEmpty();
         RuleFor(parkedCar => parkedCar.Arrival)
-            .GreaterThan(DateTimeOffset.MinValue)
-            .LessThanOrEqualTo(DateTimeOffset.MaxValue);
+            .GreaterThan(DateTime.MinValue)
+            .LessThanOrEqualTo(DateTime.MaxValue);
+        RuleFor(parkedCar => parkedCar.TimeZoneInfo).NotEmpty(); 
         RuleFor(parkedCar => parkedCar.HouseId).GreaterThan(default(int)); 
     }
 }
