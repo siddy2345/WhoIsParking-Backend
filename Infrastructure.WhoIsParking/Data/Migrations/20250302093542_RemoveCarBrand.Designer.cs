@@ -3,6 +3,7 @@ using System;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.WhoIsParking.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250302093542_RemoveCarBrand")]
+    partial class RemoveCarBrand
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -128,7 +131,7 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ParkedCarId"));
 
-                    b.Property<DateTime>("Arrival")
+                    b.Property<DateTimeOffset>("Arrival")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CarBrand")
@@ -153,10 +156,6 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
-
-                    b.Property<string>("TimeZoneInfo")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("ParkedCarId");
 

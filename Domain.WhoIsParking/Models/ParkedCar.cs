@@ -14,16 +14,16 @@ public class ParkedCar
     public string CarBrand { get; set; } = string.Empty;
 
     [MaxLength(100), Required]
-    public string CarModel { get; set; } = string.Empty;
-
-    [MaxLength(100), Required]
     public string Firstname { get; set; } = string.Empty;
 
     [MaxLength(100), Required]
     public string Lastname { get; set; } = string.Empty;
 
     [Required]
-    public DateTimeOffset Arrival { get; set; }
+    public DateTime Arrival { get; set; }
+
+    [Required]
+    public string TimeZoneInfo { get; set; } = string.Empty;
 
     [Required]
     public int HouseId { get; set; }

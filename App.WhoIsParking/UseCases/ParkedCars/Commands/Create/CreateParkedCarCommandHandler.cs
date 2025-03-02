@@ -1,20 +1,24 @@
 ﻿using App.WhoIsParking.Interfaces.Repositories;
+using Ardalis.Result;
 using MediatR;
 
 namespace App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
 
-internal class CreateParkedCarCommandHandler : IRequestHandler<CreateParkedCarCommand, int>
+internal class CreateParkedCarCommandHandler(IParkedCarRepository parkedCarRepository) : IRequestHandler<CreateParkedCarCommand, Result<int>>
 {
-    private readonly IParkedCarRepository _parkedCarRepository;
+    private readonly IParkedCarRepository _parkedCarRepository = parkedCarRepository;
 
-    public CreateParkedCarCommandHandler(IParkedCarRepository parkedCarRepository)
+    public async Task<Result<int>> Handle(CreateParkedCarCommand request, CancellationToken token)
     {
-        _parkedCarRepository = parkedCarRepository;
-    }
+        if(request.ValidationResult != null && !request.ValidationResult.IsValid)
+        {
+            var validationErrors = request.ValidationResult.Errors
+                .Select(e => 
+                new ValidationError(e.PropertyName, e.ErrorMessage, e.ErrorCode, ValidationSeverity.Error));
+            return Result.Invalid(validationErrors);
+        }
 
-    public async Task<int> Handle(CreateParkedCarCommand request, CancellationToken token)
-    {
         var res = await _parkedCarRepository.AddAsync(request.ParkedCar, token).ConfigureAwait(false);
-        return res.ParkedCarId;
+        return Result.Success(res.ParkedCarId);
     }
 }
