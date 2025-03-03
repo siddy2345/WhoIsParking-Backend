@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.WhoIsParking.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -62,7 +63,8 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                     Street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     PLZ = table.Column<int>(type: "integer", nullable: false),
-                    City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,10 +185,11 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NumberPlate = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     CarBrand = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    CarModel = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Firstname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Lastname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Arrival = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Arrival = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TimeZoneInfo = table.Column<string>(type: "text", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     HouseId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.WhoIsParking.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250301121023_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20250303193313_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -73,6 +73,9 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -118,6 +121,9 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("HouseId");
 
                     b.ToTable("House");
@@ -131,15 +137,10 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ParkedCarId"));
 
-                    b.Property<DateTimeOffset>("Arrival")
+                    b.Property<DateTime>("Arrival")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CarBrand")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("CarModel")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
@@ -161,6 +162,13 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TimeZoneInfo")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("ParkedCarId");
 

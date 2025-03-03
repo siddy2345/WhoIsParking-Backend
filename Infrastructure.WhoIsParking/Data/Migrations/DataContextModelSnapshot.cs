@@ -70,6 +70,9 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -115,6 +118,9 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("HouseId");
 
                     b.ToTable("House");
@@ -153,6 +159,9 @@ namespace Infrastructure.WhoIsParking.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("TimeZoneInfo")
                         .IsRequired()

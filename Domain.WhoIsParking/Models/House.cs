@@ -19,5 +19,8 @@ public class House
     [MaxLength(100), Required]
     public string City { get; set; } = string.Empty;
 
+    [Required]
+    public Guid TenantId { get; init; } = Guid.CreateVersion7();
+
     public IEnumerable<ParkedCar> ParkedCars { get; set; } = Enumerable.Empty<ParkedCar>();
 }
