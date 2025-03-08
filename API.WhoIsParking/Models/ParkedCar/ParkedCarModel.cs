@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.WhoIsParking.Models;
+namespace API.WhoIsParking.Models.ParkedCar;
 
 public class ParkedCarModel
 {

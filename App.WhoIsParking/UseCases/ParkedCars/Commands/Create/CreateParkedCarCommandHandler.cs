@@ -4,9 +4,14 @@ using MediatR;
 
 namespace App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
 
-internal class CreateParkedCarCommandHandler(IParkedCarRepository parkedCarRepository) : IRequestHandler<CreateParkedCarCommand, Result<int>>
+internal class CreateParkedCarCommandHandler : IRequestHandler<CreateParkedCarCommand, Result<int>>
 {
-    private readonly IParkedCarRepository _parkedCarRepository = parkedCarRepository;
+    private readonly IParkedCarRepository _parkedCarRepository;
+
+    public CreateParkedCarCommandHandler(IParkedCarRepository parkedCarRepository)
+    {
+        _parkedCarRepository = parkedCarRepository;
+    }
 
     public async Task<Result<int>> Handle(CreateParkedCarCommand request, CancellationToken token)
     {

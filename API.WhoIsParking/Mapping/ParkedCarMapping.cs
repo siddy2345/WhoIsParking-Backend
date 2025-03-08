@@ -1,4 +1,5 @@
-﻿using API.WhoIsParking.Models;
+﻿using API.WhoIsParking.Models.ParkedCar;
+using App.WhoIsParking.UseCases.ParkedCars.Queries.GetAll;
 using Domain.WhoIsParking.Models;
 
 namespace API.WhoIsParking.Mapping
@@ -7,7 +8,7 @@ namespace API.WhoIsParking.Mapping
     {
         public static ParkedCar MapToDomainModel(this ParkedCarModel parkedCar)
         {
-            return new ParkedCar() 
+            return new ParkedCar
             {
                 ParkedCarId = parkedCar.ParkedCarId,
                 Arrival = parkedCar.Arrival,
@@ -17,6 +18,22 @@ namespace API.WhoIsParking.Mapping
                 Firstname = parkedCar.Firstname,
                 Lastname = parkedCar.Lastname,
                 HouseId = parkedCar.HouseId,
+            };
+        }
+
+        public static ParkedCarViewModel MapToViewModel(this ParkedCarReadAllResult readAllResult)
+        {
+            return new ParkedCarViewModel
+            {
+                ParkedCarId = readAllResult.ParkedCarId,
+                Arrival = readAllResult.Arrival,
+                CarBrand = readAllResult.CarBrand,
+                Firstname = readAllResult.Firstname,
+                Lastname = readAllResult.Lastname,
+                HouseAdress = readAllResult.HouseAdress,
+                HouseNumber = readAllResult.HouseNumber,
+                NumberPlate = readAllResult.NumberPlate,
+                Zip = readAllResult.Zip
             };
         }
     }

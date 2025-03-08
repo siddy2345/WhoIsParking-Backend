@@ -1,43 +1,45 @@
 ﻿using App.WhoIsParking.Interfaces.Repositories;
+using App.WhoIsParking.UseCases.ParkedCars.Queries.GetAll;
 using Domain.WhoIsParking.Models;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.WhoIsParking.Repositories.EF;
 
-internal class ParkedCarRepository : IParkedCarRepository
+internal class ParkedCarRepository : BaseRepository<ParkedCar, int>, IParkedCarRepository
 {
     private readonly DataContext _dbContext;
 
-    public ParkedCarRepository(DataContext dataContext)
+    public ParkedCarRepository(DataContext dbContext) : base(dbContext)
     {
-        _dbContext = dataContext;
+        _dbContext = dbContext;
     }
 
-    public Task<ParkedCar?> GetAggregateAsync(int id, CancellationToken token)
+    public async Task<IReadOnlyCollection<ParkedCarReadAllResult>> ReadParkedCars(GetAllParkedCarsCommand request, CancellationToken token)
     {
-        throw new NotImplementedException();
-    }
+        var query = from pc in _dbContext.ParkedCar
+                    join h in _dbContext.House
+                        on pc.HouseId equals h.HouseId
 
-    public Task<ParkedCar?> GetAsync(int id, CancellationToken token)
-    {
-        throw new NotImplementedException();
-    }
+                    where pc.TenantId == request.TenantId
+                    && h.TenantId == request.TenantId
+                    && request.DateFrom <= DateOnly.FromDateTime(pc.Arrival) 
+                    && request.DateTo >= DateOnly.FromDateTime(pc.Arrival)
+                    && request.HouseIds.Contains(h.HouseId)
 
-    public async Task<ParkedCar> AddAsync(ParkedCar entity, CancellationToken token)
-    {
-        var entry = await _dbContext.AddAsync(entity, token).ConfigureAwait(false);
-        await _dbContext.SaveChangesAsync(token).ConfigureAwait(false);
-        return entry.Entity;
-    }
+                    select new ParkedCarReadAllResult
+                    {
+                        ParkedCarId = pc.ParkedCarId,
+                        CarBrand = pc.CarBrand,
+                        Arrival = TimeZoneInfo.ConvertTimeFromUtc(pc.Arrival, TimeZoneInfo.FindSystemTimeZoneById(pc.TimeZoneInfo)),
+                        Firstname = pc.Firstname,
+                        Lastname = pc.Lastname,
+                        NumberPlate = pc.NumberPlate,
+                        HouseAdress = h.Street,
+                        HouseNumber = h.Number,
+                        Zip = h.Zip
+                    };
 
-    public Task DeleteAsync(ParkedCar entity, CancellationToken token)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    public Task<ParkedCar> UpdateAsync(ParkedCar entity, CancellationToken token)
-    {
-        throw new NotImplementedException();
+        return await query.AsNoTracking().ToListAsync(token).ConfigureAwait(false);
     }
 }
