@@ -14,7 +14,7 @@ public class House
     public string Number { get; set; } = string.Empty;
 
     [Required]
-    public int PLZ { get; set; }
+    public int Zip { get; set; }
 
     [MaxLength(100), Required]
     public string City { get; set; } = string.Empty;

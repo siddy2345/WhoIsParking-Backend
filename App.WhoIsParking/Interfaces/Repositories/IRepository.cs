@@ -1,8 +1,4 @@
-﻿using System.Data.SqlTypes;
-using System.Numerics;
-using System.Security.Cryptography;
-
-namespace App.WhoIsParking.Interfaces.Repositories;
+﻿namespace App.WhoIsParking.Interfaces.Repositories;
 
 public interface IRepository<TEntity, TId> where TEntity: class where TId : IEquatable<TId>
 {

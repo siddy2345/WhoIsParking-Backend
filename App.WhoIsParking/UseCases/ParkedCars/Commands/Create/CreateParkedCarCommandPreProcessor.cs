@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using Domain.WhoIsParking.Validators.ParkedCarValidator.Create;
 using MediatR.Pipeline;
 
 namespace App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
