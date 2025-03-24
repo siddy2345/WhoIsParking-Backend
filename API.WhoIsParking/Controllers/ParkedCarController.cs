@@ -6,6 +6,7 @@ using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Domain.WhoIsParking.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Swashbuckle.AspNetCore.Filters;
@@ -52,6 +53,7 @@ public class ParkedCarController(IMediator mediator) : ControllerBase
     /// <param name="token">Token to cancel operation</param>
     /// <returns>Id of newly created object</returns>
     /// <exception cref="Exception">InternalServerError if something went completely wrong in the application</exception>
+    [Authorize]
     [HttpPost("search")]
     [SwaggerResponseHeader(StatusCodes.Status201Created, "Parked cars retreived", nameof(ParkedCarViewModel), "")]
     [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "Model is invalid", "BadRequest", "")]
