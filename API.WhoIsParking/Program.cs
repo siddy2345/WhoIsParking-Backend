@@ -1,8 +1,10 @@
 using API.WhoIsParking.Extensions;
+using API.WhoIsParking.UserClaims;
 using App.WhoIsParking;
 using Domain.WhoIsParking.Models;
 using Infrastructure.WhoIsParking;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -26,20 +28,27 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+// DB
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultPostgresConnection"));
 });
 
+// Auth
 builder.Services.AddAuthorization();
 
+// Identity Core
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<DataContext>();
+
+// ClaimsPrincipalFactory
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 
 // Inject Layers
 builder.Services.AddInjectionApplication();
 builder.Services.AddInjectionInfrastructure();
 
+// CORS
 builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     policy =>
     {

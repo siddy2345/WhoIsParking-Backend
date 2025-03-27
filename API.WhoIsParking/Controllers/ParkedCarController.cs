@@ -1,5 +1,6 @@
 ﻿using API.WhoIsParking.Mapping;
 using API.WhoIsParking.Models.ParkedCar;
+using API.WhoIsParking.UserClaims;
 using App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
 using App.WhoIsParking.UseCases.ParkedCars.Queries.GetAll;
 using Ardalis.Result;
@@ -15,9 +16,14 @@ namespace API.WhoIsParking.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ParkedCarController(IMediator mediator) : ControllerBase
+public class ParkedCarController : ControllerBase
 {
-    private readonly IMediator _mediator = mediator;
+    private readonly IMediator _mediator;
+
+    public ParkedCarController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     /// <summary>
     /// Creates a parked car object
@@ -57,12 +63,18 @@ public class ParkedCarController(IMediator mediator) : ControllerBase
     [HttpPost("search")]
     [SwaggerResponseHeader(StatusCodes.Status201Created, "Parked cars retreived", nameof(ParkedCarViewModel), "")]
     [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "Model is invalid", "BadRequest", "")]
+    [SwaggerResponseHeader(StatusCodes.Status401Unauthorized, "Unauthorized", "Unauthorized", "")]
     public async Task<ActionResult<List<ParkedCarViewModel>>> GetAllAsync([FromBody, BindRequired] ParkedCarSearchModel searchModel, CancellationToken token)
     {
         try
         {
+            var tenantId = User.GetTenantId();
+
+            if(tenantId == null) 
+                return Unauthorized();
+
             var command = new GetAllParkedCarsCommand(
-                searchModel.DateFrom, searchModel.DateTo, searchModel.TenantId, searchModel.HouseIds);
+                searchModel.DateFrom, searchModel.DateTo, tenantId.Value, searchModel.HouseIds);
 
             var resultReadAllResult = await _mediator.Send(command, token).ConfigureAwait(false);
 
