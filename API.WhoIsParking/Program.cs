@@ -39,6 +39,7 @@ builder.Services.AddAuthorization();
 
 // Identity Core
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+    .AddRoles<IdentityRole<int>>()
     .AddEntityFrameworkStores<DataContext>();
 
 // ClaimsPrincipalFactory

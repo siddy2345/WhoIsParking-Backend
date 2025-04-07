@@ -5,6 +5,7 @@ using App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
 using App.WhoIsParking.UseCases.ParkedCars.Queries.GetAll;
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
+using Domain.WhoIsParking.Constants;
 using Domain.WhoIsParking.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +20,12 @@ namespace API.WhoIsParking.Controllers;
 public class ParkedCarController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<ParkedCarController> _logger;
 
-    public ParkedCarController(IMediator mediator)
+    public ParkedCarController(IMediator mediator, ILogger<ParkedCarController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     /// <summary>
@@ -47,27 +50,28 @@ public class ParkedCarController : ControllerBase
         }
         catch (Exception e)
         {
-            //Log exception
+            _logger.LogError(e, e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 
     /// <summary>
-    /// Get ParkedCars
+    /// Get ParkedCars (only for Admins)
     /// </summary>
     /// <param name="searchModel">Search model to get parked cars by</param>
     /// <param name="token">Token to cancel operation</param>
     /// <returns>Id of newly created object</returns>
     /// <exception cref="Exception">InternalServerError if something went completely wrong in the application</exception>
-    [Authorize]
     [HttpPost("search")]
+    [Authorize(Roles = UserClaimsConstants.AdminRole)]
     [SwaggerResponseHeader(StatusCodes.Status201Created, "Parked cars retreived", nameof(ParkedCarViewModel), "")]
     [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "Model is invalid", "BadRequest", "")]
     [SwaggerResponseHeader(StatusCodes.Status401Unauthorized, "Unauthorized", "Unauthorized", "")]
+    [SwaggerResponseHeader(StatusCodes.Status403Forbidden, "Forbidden", "Forbidden", "")]
     public async Task<ActionResult<List<ParkedCarViewModel>>> GetAllAsync([FromBody, BindRequired] ParkedCarSearchModel searchModel, CancellationToken token)
     {
         try
-        {
+        {   
             var tenantId = User.GetTenantId();
 
             if(tenantId == null) 
@@ -84,7 +88,7 @@ public class ParkedCarController : ControllerBase
         }
         catch (Exception e)
         {
-            //Log exception
+            _logger.LogError(e, e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
