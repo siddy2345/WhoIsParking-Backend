@@ -31,7 +31,7 @@ internal class EmailSender : IEmailSender<ApplicationUser>
     public async Task SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink)
         => await SendEmail(email, "Email verifizieren", confirmationLink /*TODO: link has to be as button or just link fr*/).ConfigureAwait(false);
 
-    public async Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink)
+    public async Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink) // is not used by identity
         => await SendEmail(email, "Password zurücksetzen Link", resetLink ).ConfigureAwait(false);
 
     public async Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) 
@@ -41,18 +41,18 @@ internal class EmailSender : IEmailSender<ApplicationUser>
     {
         var mimeMessage = CreateMimeMessage(to, subject, body);
 
-        using var smpt = new SmtpClient();
+        using var smtp = new SmtpClient();
 
-        await smpt.ConnectAsync(_emailOptions.Host, _emailOptions.Port, SecureSocketOptions.StartTls)
+        await smtp.ConnectAsync(_emailOptions.Host, _emailOptions.Port, SecureSocketOptions.StartTls)
             .ConfigureAwait(false);
 
-        await smpt.AuthenticateAsync(_emailOptions.Email, _emailOptions.Password)
+        await smtp.AuthenticateAsync(_emailOptions.Email, _emailOptions.Password)
             .ConfigureAwait(false);
 
-        await smpt.SendAsync(mimeMessage)
+        await smtp.SendAsync(mimeMessage)
             .ConfigureAwait(false);
 
-        await smpt.DisconnectAsync(true)
+        await smtp.DisconnectAsync(true)
             .ConfigureAwait(false);
     }
 

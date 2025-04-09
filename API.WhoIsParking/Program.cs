@@ -37,8 +37,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 // Auth
 builder.Services.AddAuthorization();
 
-// Identity Core
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+// ASP.NET Identity
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt => opt.SignIn.RequireConfirmedEmail = true)
     .AddRoles<IdentityRole<int>>()
     .AddEntityFrameworkStores<DataContext>();
 
