@@ -47,7 +47,7 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, Applica
 
 // Inject Layers
 builder.Services.AddInjectionApplication();
-builder.Services.AddInjectionInfrastructure();
+builder.Services.AddInjectionInfrastructure(builder.Configuration);
 
 // CORS
 builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
