@@ -4,6 +4,7 @@ using App.WhoIsParking;
 using Domain.WhoIsParking.Models;
 using Infrastructure.WhoIsParking;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -36,9 +37,19 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddAuthorization();
 
 // ASP.NET Identity
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt => opt.SignIn.RequireConfirmedEmail = true)
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options => 
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+        options.Lockout.MaxFailedAccessAttempts = 10; 
+    })
     .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<DataContext>();
+
+//builder.Services.AddOptions<BearerTokenOptions>(IdentityConstants.BearerScheme).Configure(options =>
+//{
+//    options.BearerTokenExpiration = TimeSpan.FromSeconds(5);
+//    options.RefreshTokenExpiration = TimeSpan.FromSeconds(5);
+//});
 
 // ClaimsPrincipalFactory
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
@@ -57,6 +68,13 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
 
 builder.Services.AddTransient<DatabaseSeeder>();
 
+// Allow CORS for Angular dev
+builder.Services.AddCors(options => 
+    options.AddPolicy(name: "NgOrigins", 
+    policy => 
+        policy.WithOrigins("https://localhost:4200", "http://localhost:4200")
+        .AllowAnyMethod().AllowAnyHeader()));
+
 var app = builder.Build();
 
 // DB migrations
@@ -68,6 +86,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseStaticFiles();
     app.UseSwaggerUI(c => c.InjectStylesheet("/swagger-ui/SwaggerDark.css"));
+
+    app.UseCors("NgOrigins");
 }
 
 using (var scope = app.Services.CreateScope())
