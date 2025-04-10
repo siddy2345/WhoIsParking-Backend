@@ -30,16 +30,14 @@ builder.Services.AddSwaggerGen(options =>
 
 // DB
 builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultPostgresConnection"));
-});
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultPostgresConnection")));
 
 // Auth
 builder.Services.AddAuthorization();
 
 // ASP.NET Identity
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt => opt.SignIn.RequireConfirmedEmail = true)
-    .AddRoles<IdentityRole<int>>()
+    .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<DataContext>();
 
 // ClaimsPrincipalFactory
@@ -57,7 +55,12 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     }
 ));
 
+builder.Services.AddTransient<DatabaseSeeder>();
+
 var app = builder.Build();
+
+// DB migrations
+app.ApplyMigrations();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -65,15 +68,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseStaticFiles();
     app.UseSwaggerUI(c => c.InjectStylesheet("/swagger-ui/SwaggerDark.css"));
+}
 
-    // DB migrations
-    app.ApplyMigrations();
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync().ConfigureAwait(false);
 }
 
 app.MapIdentityApi<ApplicationUser>();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
