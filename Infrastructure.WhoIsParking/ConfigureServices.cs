@@ -12,7 +12,11 @@ public static class ConfigureServices
 {
     public static void AddInjectionInfrastructure(this IServiceCollection services, ConfigurationManager config)
     {
+        // Repositories
         services.AddScoped<IParkedCarRepository, ParkedCarRepository>();
+        services.AddScoped<IHouseRepository, HouseRepository>();
+
+        // Email service
         services.Configure<EmailOptions>(config.GetSection("EMAIL_CONFIG"));
         services.AddTransient<IEmailSender<ApplicationUser>, EmailSender>();
     }

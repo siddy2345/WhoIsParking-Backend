@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.WhoIsParking.Models;
+namespace API.WhoIsParking.Models.House;
 
-public class House
+public class HouseModel
 {
-    [Required]
     public int HouseId { get; set; }
 
     [MaxLength(100), Required]
-    public string Street {  get; set; } = string.Empty;
+    public string Street { get; set; } = string.Empty;
 
     [MaxLength(20), Required]
     public string Number { get; set; } = string.Empty;
@@ -18,9 +17,4 @@ public class House
 
     [MaxLength(100), Required]
     public string City { get; set; } = string.Empty;
-
-    [Required]
-    public Guid TenantId { get; set; } = Guid.CreateVersion7();
-
-    public IEnumerable<ParkedCar> ParkedCars { get; set; } = Enumerable.Empty<ParkedCar>();
 }

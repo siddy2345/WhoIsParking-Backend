@@ -1,4 +1,5 @@
-﻿using Domain.WhoIsParking.Models;
+﻿using Domain.WhoIsParking.Constants;
+using Domain.WhoIsParking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,8 +47,8 @@ public class DatabaseSeeder
         ApplicationRole adminRole = new()
         {
             Id = 1,
-            Name = "admin",
-            NormalizedName = "ADMIN",
+            Name = UserClaimsConstants.AdminRole,
+            NormalizedName = UserClaimsConstants.AdminRole.ToUpper(),
             ConcurrencyStamp = Guid.CreateVersion7().ToString(),
             TenantId = tenantId
         };

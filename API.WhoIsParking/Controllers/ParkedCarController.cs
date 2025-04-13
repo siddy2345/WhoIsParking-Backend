@@ -64,7 +64,7 @@ public class ParkedCarController : ControllerBase
     /// <exception cref="Exception">InternalServerError if something went completely wrong in the application</exception>
     [HttpPost("search")]
     [Authorize(Roles = UserClaimsConstants.AdminRole)]
-    [SwaggerResponseHeader(StatusCodes.Status201Created, "Parked cars retreived", nameof(ParkedCarViewModel), "")]
+    [SwaggerResponseHeader(StatusCodes.Status201Created, "Parked cars retreived", nameof(List<ParkedCarViewModel>), "")]
     [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "Model is invalid", "BadRequest", "")]
     [SwaggerResponseHeader(StatusCodes.Status401Unauthorized, "Unauthorized", "Unauthorized", "")]
     [SwaggerResponseHeader(StatusCodes.Status403Forbidden, "Forbidden", "Forbidden", "")]
