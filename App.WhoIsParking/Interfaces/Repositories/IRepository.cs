@@ -8,6 +8,6 @@ public interface IRepository<TEntity, TId> where TEntity: class where TId : IEqu
 
     // Command
     Task<TEntity> AddAsync(TEntity entity, CancellationToken token);
-    Task<TEntity> UpdateAsync(TEntity entity, CancellationToken token);
+    Task UpdateAsync(TEntity entity, CancellationToken token);
     Task DeleteAsync(TEntity entity, CancellationToken token);
 }

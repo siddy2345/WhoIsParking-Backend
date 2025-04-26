@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mapping\" />
+    <Folder Include="UseCases\Houses\Commands\Delete\" />
   </ItemGroup>
 
 </Project>

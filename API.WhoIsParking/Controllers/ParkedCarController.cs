@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace API.WhoIsParking.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/parkedCars")]
 [ApiController]
 public class ParkedCarController : ControllerBase
 {

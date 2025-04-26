@@ -15,6 +15,13 @@ internal class HouseRepository : BaseRepository<House, int>, IHouseRepository
         _dbContext = dbContext;
     }
 
+    public override async Task<House?> GetAggregateAsync(int id, CancellationToken token)
+    {
+        return await _dbContext.House
+            .Where(h => h.HouseId == id) //FIXME: might have to have parkedcars included as aggregate
+            .SingleOrDefaultAsync().ConfigureAwait(false);
+    }
+
     public async Task<IReadOnlyCollection<HouseReadAllResult>> ReadHousesByTenant(Guid tenantId, CancellationToken token)
     {
         var query = from h in _dbContext.House

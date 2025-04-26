@@ -7,7 +7,7 @@ public class CreateHouseValidator : AbstractValidator<House>
 {
     public CreateHouseValidator()
     {
-        Include(new HouseValidator());
+        Include(new HouseRules());
         RuleFor(house => house.HouseId).Equal(default(int));
     }
 }

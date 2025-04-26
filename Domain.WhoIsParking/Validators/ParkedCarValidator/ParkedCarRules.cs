@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Domain.WhoIsParking.Validators.ParkedCarValidator;
 
-internal class ParkedCarValidator : AbstractValidator<ParkedCar>
+internal class ParkedCarRules : AbstractValidator<ParkedCar>
 {
-    public ParkedCarValidator()
+    public ParkedCarRules()
     {
         RuleFor(parkedCar => parkedCar.NumberPlate).NotEmpty();
         RuleFor(parkedCar => parkedCar.CarBrand).NotEmpty();

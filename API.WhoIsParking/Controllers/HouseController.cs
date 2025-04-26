@@ -2,6 +2,7 @@
 using API.WhoIsParking.Models.House;
 using API.WhoIsParking.UserClaims;
 using App.WhoIsParking.UseCases.Houses.Commands.Create;
+using App.WhoIsParking.UseCases.Houses.Commands.Update;
 using App.WhoIsParking.UseCases.Houses.Queries.GetAll;
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
@@ -15,7 +16,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace API.WhoIsParking.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/houses")]
 [ApiController]
 public class HouseController : ControllerBase
 {
@@ -67,7 +68,7 @@ public class HouseController : ControllerBase
     /// <summary>
     /// Creates a house object (only for Admins)
     /// </summary>
-    /// <param name="parkedCarModel">The house to create</param>
+    /// <param name="houseModel">The house to create</param>
     /// <param name="token">Token to cancel operation</param>
     /// <returns>Id of newly created object</returns>
     /// <exception cref="Exception">InternalServerError if something went completely wrong in the application</exception>
@@ -89,6 +90,46 @@ public class HouseController : ControllerBase
             House house = HouseMapping.MapToDomainModel(houseModel);
             house.TenantId = tenantId!.Value;
             var command = new CreateHouseCommand(house);
+            Result<int> response = await _mediator.Send(command, token).ConfigureAwait(false);
+
+            return response.ToActionResult(this);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    /// <summary>
+    /// Updates a house object (only for Admins)
+    /// </summary>
+    /// <param name="houseId">The id of the house to update</param>
+    /// <param name="houseModel">The house to update</param>
+    /// <param name="token">Token to cancel operation</param>
+    /// <returns>No content</returns>
+    /// <exception cref="Exception">InternalServerError if something went completely wrong in the application</exception>
+    [HttpPut("{houseId:int}")]
+    [Authorize(Roles = UserClaimsConstants.AdminRole)]
+    [SwaggerResponseHeader(StatusCodes.Status204NoContent, "House successfully updated", "Updated", "")]
+    [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "House could not be updated", "BadRequest", "")]
+    [SwaggerResponseHeader(StatusCodes.Status401Unauthorized, "Unauthorized", "Unauthorized", "")]
+    [SwaggerResponseHeader(StatusCodes.Status403Forbidden, "Forbidden", "Forbidden", "")]
+    public async Task<ActionResult<int>> PutAsync(int houseId, [FromBody, BindRequired] HouseModel houseModel, CancellationToken token)
+    {
+        if (houseModel.HouseId != houseId)
+            return BadRequest("The id in the route does not match the id in the body");
+
+        try
+        {
+            var tenantId = User.GetTenantId();
+
+            if (tenantId == null)
+                return Unauthorized();
+
+            House house = HouseMapping.MapToDomainModel(houseModel);
+            house.TenantId = tenantId!.Value;
+            var command = new UpdateHouseCommand(house);
             Result<int> response = await _mediator.Send(command, token).ConfigureAwait(false);
 
             return response.ToActionResult(this);

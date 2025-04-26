@@ -1,4 +1,6 @@
-﻿using App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
+﻿using App.WhoIsParking.UseCases.Houses.Commands.Create;
+using App.WhoIsParking.UseCases.Houses.Commands.Update;
+using App.WhoIsParking.UseCases.ParkedCars.Commands.Create;
 using App.WhoIsParking.UseCases.ParkedCars.Queries.GetAll;
 using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,5 +19,8 @@ public static class ConfigureServices
 
         services.AddTransient<IRequestPreProcessor<CreateParkedCarCommand>, CreateParkedCarCommandPreProcessor>();
         services.AddTransient<IRequestPreProcessor<GetAllParkedCarsCommand>, GetAllParkedCarsPreProcessor>();
+
+        services.AddTransient<IRequestPreProcessor<CreateHouseCommand>, CreateHouseCommandPreProcessor>();
+        services.AddTransient<IRequestPreProcessor<UpdateHouseCommand>, UpdateHouseCommandPreProcessor>();
     }
 }

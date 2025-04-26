@@ -20,6 +20,11 @@ internal class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
         return entry.Entity;
     }
 
+    public virtual async Task UpdateAsync(TEntity entity, CancellationToken token)
+    {
+        await _dbContext.SaveChangesAsync(token).ConfigureAwait(false);
+    }
+
     public virtual Task DeleteAsync(TEntity entity, CancellationToken token)
     {
         throw new NotImplementedException();
@@ -31,11 +36,6 @@ internal class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
     }
 
     public virtual Task<TEntity?> GetAsync(TId id, CancellationToken token)
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual Task<TEntity> UpdateAsync(TEntity entity, CancellationToken token)
     {
         throw new NotImplementedException();
     }

@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Domain.WhoIsParking.Validators.HouseValidator;
 
-internal class HouseValidator : AbstractValidator<House>
+internal class HouseRules : AbstractValidator<House>
 {
-    public HouseValidator()
+    public HouseRules()
     {
         RuleFor(house => house.City).NotEmpty();
         RuleFor(house => house.Zip).GreaterThan(default(int));

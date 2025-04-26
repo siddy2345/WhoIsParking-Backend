@@ -2,18 +2,18 @@
 using Ardalis.Result;
 using MediatR;
 
-namespace App.WhoIsParking.UseCases.Houses.Commands.Create;
+namespace App.WhoIsParking.UseCases.Houses.Commands.Update;
 
-internal class CreateHouseCommandHandler : IRequestHandler<CreateHouseCommand, Result<int>>
+internal class UpdateHouseCommandHandler : IRequestHandler<UpdateHouseCommand, Result>
 {
     private readonly IHouseRepository _houseRepository;
 
-    public CreateHouseCommandHandler(IHouseRepository houseRepository)
+    public UpdateHouseCommandHandler(IHouseRepository houseRepository)
     {
         _houseRepository = houseRepository;
     }
 
-    public async Task<Result<int>> Handle(CreateHouseCommand request, CancellationToken token)
+    public async Task<Result> Handle(UpdateHouseCommand request, CancellationToken token)
     {
         if (request.ValidationResult != null && !request.ValidationResult.IsValid)
         {
@@ -23,7 +23,7 @@ internal class CreateHouseCommandHandler : IRequestHandler<CreateHouseCommand, R
             return Result.Invalid(validationErrors);
         }
 
-        var result = await _houseRepository.AddAsync(request.House, token).ConfigureAwait(false);
-        return Result.Created(result.HouseId);
+        await _houseRepository.UpdateAsync(request.House, token).ConfigureAwait(false);
+        return Result.NoContent();
     }
 }
