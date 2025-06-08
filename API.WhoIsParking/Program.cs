@@ -58,21 +58,14 @@ builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, Applica
 builder.Services.AddInjectionApplication();
 builder.Services.AddInjectionInfrastructure(builder.Configuration);
 
-// CORS
-builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-    policy =>
-    {
-        policy.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
-    }
-));
-
+// DB Seeder for admin user
 builder.Services.AddTransient<DatabaseSeeder>();
 
 // Allow CORS for Angular dev
 builder.Services.AddCors(options => 
     options.AddPolicy(name: "NgOrigins", 
     policy => 
-        policy.WithOrigins("https://localhost:4200", "http://localhost:4200")
+        policy.WithOrigins("https://localhost:4200", "http://localhost:4200", "http://192.168.0.25:4200")
         .AllowAnyMethod().AllowAnyHeader()));
 
 var app = builder.Build();
