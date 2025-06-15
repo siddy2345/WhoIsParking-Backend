@@ -1,4 +1,5 @@
 ﻿using App.WhoIsParking.Interfaces.Repositories;
+using App.WhoIsParking.UseCases.Houses.Queries.Common;
 using App.WhoIsParking.UseCases.Houses.Queries.GetAll;
 using Domain.WhoIsParking.Models;
 using Infrastructure.WhoIsParking.Data.EntitiesConfig;
@@ -43,5 +44,18 @@ internal class HouseRepository : BaseRepository<House, int>, IHouseRepository
             .Where(house => house.HouseId == houseId)
             .Select(house => house.TenantId)
             .SingleOrDefaultAsync(token);
+    }
+
+    public Task<HouseReadResult?> ReadHouseById(int houseId, Guid tenantId, CancellationToken token)
+    {
+        return _dbContext.House.Where(h => h.HouseId == houseId && h.TenantId == tenantId).Select(house => new HouseReadResult()
+        {
+            HouseId = house.HouseId,
+            Street = house.Street,
+            Number = house.Number,
+            City = house.City,
+            Zip = house.Zip
+        }).AsNoTracking()
+        .SingleOrDefaultAsync(token);
     }
 }

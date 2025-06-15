@@ -1,4 +1,5 @@
 ﻿using App.WhoIsParking.Interfaces.Repositories;
+using App.WhoIsParking.UseCases.Houses.Queries.Common;
 using Ardalis.Result;
 using MediatR;
 

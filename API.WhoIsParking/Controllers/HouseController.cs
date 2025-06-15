@@ -4,6 +4,7 @@ using API.WhoIsParking.UserClaims;
 using App.WhoIsParking.UseCases.Houses.Commands.Create;
 using App.WhoIsParking.UseCases.Houses.Commands.Update;
 using App.WhoIsParking.UseCases.Houses.Queries.GetAll;
+using App.WhoIsParking.UseCases.Houses.Queries.GetById;
 using Ardalis.Result;
 using Ardalis.Result.AspNetCore;
 using Domain.WhoIsParking.Constants;
@@ -27,6 +28,48 @@ public class HouseController : ControllerBase
     {
         _mediator = mediator;
         _logger = logger;
+    }
+
+    /// <summary>
+    /// Get house by id (only for Admins)
+    /// </summary>
+    /// <param name="houseId">Id to get</param>
+    /// <param name="token">Token to cancel operation</param>
+    /// <returns>Model</returns>
+    /// <exception cref="Exception">InternalServerError if something went completely wrong in the application</exception>
+    [HttpGet("{houseId:int}")]
+    [Authorize(Roles = UserClaimsConstants.AdminRole)]
+    [SwaggerResponseHeader(StatusCodes.Status200OK, "House retreived", nameof(HouseModel), "")]
+    [SwaggerResponseHeader(StatusCodes.Status404NotFound, "House not found", "Not found", "")]
+    [SwaggerResponseHeader(StatusCodes.Status401Unauthorized, "Unauthorized", "Unauthorized", "")]
+    [SwaggerResponseHeader(StatusCodes.Status403Forbidden, "Forbidden", "Forbidden", "")]
+    public async Task<ActionResult<HouseModel>> GetAsync([FromRoute, BindRequired] int houseId, CancellationToken token)
+    {
+        try
+        {
+            var tenantId = User.GetTenantId();
+
+            if (tenantId == null)
+                return Unauthorized();
+
+            var command = new GetHouseCommand(houseId, tenantId.Value);
+
+            var resultReadAllResult = await _mediator.Send(command, token).ConfigureAwait(false);
+
+            if (resultReadAllResult.IsNotFound())
+                return Result<HouseModel>.NotFound(resultReadAllResult.Errors.ToArray())
+                    .ToActionResult(this);
+
+            var viewModel = Result.Success(HouseMapping.MapToModel(resultReadAllResult.Value));
+
+            return viewModel.ToActionResult(this);
+
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 
     /// <summary>
@@ -115,7 +158,7 @@ public class HouseController : ControllerBase
     [SwaggerResponseHeader(StatusCodes.Status400BadRequest, "House could not be updated", "BadRequest", "")]
     [SwaggerResponseHeader(StatusCodes.Status401Unauthorized, "Unauthorized", "Unauthorized", "")]
     [SwaggerResponseHeader(StatusCodes.Status403Forbidden, "Forbidden", "Forbidden", "")]
-    public async Task<ActionResult<int>> PutAsync(int houseId, [FromBody, BindRequired] HouseModel houseModel, CancellationToken token)
+    public async Task<ActionResult> PutAsync(int houseId, [FromBody, BindRequired] HouseModel houseModel, CancellationToken token)
     {
         if (houseModel.HouseId != houseId)
             return BadRequest("The id in the route does not match the id in the body");
@@ -130,7 +173,7 @@ public class HouseController : ControllerBase
             House house = HouseMapping.MapToDomainModel(houseModel);
             house.TenantId = tenantId!.Value;
             var command = new UpdateHouseCommand(house);
-            Result<int> response = await _mediator.Send(command, token).ConfigureAwait(false);
+            Result response = await _mediator.Send(command, token).ConfigureAwait(false);
 
             return response.ToActionResult(this);
         }
@@ -149,9 +192,9 @@ public class HouseController : ControllerBase
         {
             var command = new GetAllHousesCommand(tenantId);
 
-            var resultReadAllResult = await _mediator.Send(command, token).ConfigureAwait(false);
+            var readAllResult = await _mediator.Send(command, token).ConfigureAwait(false);
 
-            var viewModels = Result.Success(resultReadAllResult.Value.Select(HouseMapping.MapToViewModel).ToList());
+            var viewModels = Result.Success(readAllResult.Value.Select(HouseMapping.MapToViewModel).ToList());
 
             return viewModels.ToActionResult(this);
         }

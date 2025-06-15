@@ -1,4 +1,4 @@
-﻿namespace App.WhoIsParking.UseCases.Houses.Queries.GetAll;
+﻿namespace App.WhoIsParking.UseCases.Houses.Queries.Common;
 
 public class HouseReadAllResult
 {
