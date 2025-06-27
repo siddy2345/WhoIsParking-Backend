@@ -27,6 +27,8 @@ internal class ParkedCarRepository : BaseRepository<ParkedCar, int>, IParkedCarR
                     && request.DateTo >= DateOnly.FromDateTime(pc.Arrival)
                     && request.HouseIds.Contains(h.HouseId)
 
+                    orderby pc.Arrival
+
                     select new ParkedCarReadAllResult
                     {
                         ParkedCarId = pc.ParkedCarId,
