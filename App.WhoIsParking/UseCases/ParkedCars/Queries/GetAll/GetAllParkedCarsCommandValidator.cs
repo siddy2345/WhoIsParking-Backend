@@ -7,10 +7,9 @@ internal class GetAllParkedCarsCommandValidator : AbstractValidator<GetAllParked
     public GetAllParkedCarsCommandValidator()
     {
         RuleFor(c => c.DateFrom)
-                .GreaterThan(DateOnly.MinValue)
-                .LessThanOrEqualTo(c => c.DateFrom);
+                .GreaterThanOrEqualTo(DateOnly.MinValue)
+                .LessThanOrEqualTo(c => c.DateTo);
         RuleFor(c => c.DateTo)
-                .GreaterThan(c => c.DateFrom)
                 .LessThanOrEqualTo(DateOnly.MaxValue);
         RuleFor(c => c.TenantId).NotEmpty().NotNull();
         RuleFor(c => c.HouseIds).NotEmpty().NotNull();
